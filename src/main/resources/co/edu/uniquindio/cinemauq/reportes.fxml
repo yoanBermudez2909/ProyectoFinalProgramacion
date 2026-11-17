@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.cinemauq.viewController.ReporteViewController">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+    <children>
+        <VBox spacing="8.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#onGenerarReportes" text="Generar reportes generales" />
+                <Label fx:id="lblEntradasVendidas" text="Total entradas vendidas: -" />
+                <Label fx:id="lblIngresos" text="Total ingresos: -" />
+                <Label fx:id="lblMasVendida" text="Pelicula mas vendida: -" />
+            </children>
+        </VBox>
+        <Separator />
+        <VBox spacing="8.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <children>
+                        <Label text="Funcion:" />
+                        <ComboBox fx:id="cmbFuncion" prefWidth="420.0" promptText="Seleccione una funcion" />
+                        <Button mnemonicParsing="false" onAction="#onConsultarOcupacion" text="Consultar ocupacion" />
+                    </children>
+                </HBox>
+                <Label fx:id="lblOcupacion" text="Seleccione una funcion y consulte su ocupacion." />
+            </children>
+        </VBox>
+        <Separator />
+        <VBox spacing="8.0" VBox.vgrow="ALWAYS">
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <children>
+                        <Label text="Fecha:" />
+                        <DatePicker fx:id="dpFecha" />
+                        <Button mnemonicParsing="false" onAction="#onConsultarPorFecha" text="Funciones programadas por fecha" />
+                    </children>
+                </HBox>
+                <TableView fx:id="tblFuncionesFecha" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="tbcCodigo" prefWidth="80.0" text="Codigo" />
+                        <TableColumn fx:id="tbcPelicula" prefWidth="240.0" text="Pelicula" />
+                        <TableColumn fx:id="tbcSala" prefWidth="120.0" text="Sala" />
+                        <TableColumn fx:id="tbcHora" prefWidth="80.0" text="Hora" />
+                        <TableColumn fx:id="tbcDisponibles" prefWidth="100.0" text="Disponibles" />
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+    </children>
+</VBox>

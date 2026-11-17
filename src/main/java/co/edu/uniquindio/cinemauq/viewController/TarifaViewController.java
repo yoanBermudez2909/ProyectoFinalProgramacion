@@ -1,0 +1,125 @@
+package co.edu.uniquindio.cinemauq.viewController;
+
+import co.edu.uniquindio.cinemauq.App;
+import co.edu.uniquindio.cinemauq.controller.TarifaController;
+import co.edu.uniquindio.cinemauq.excepciones.TarifaInvalidaException;
+import co.edu.uniquindio.cinemauq.modelo.TipoCliente;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+
+public class TarifaViewController {
+
+    private static final double VALOR_EJEMPLO = 15000;
+
+    TarifaController tarifaController;
+    ObservableList<TipoCliente> listTipos = FXCollections.observableArrayList();
+
+    @FXML
+    private ComboBox<TipoCliente> cmbTipoCliente;
+
+    @FXML
+    private TextField txtPorcentaje;
+
+    @FXML
+    private TableView<TipoCliente> tblListTarifa;
+
+    @FXML
+    private TableColumn<TipoCliente, String> tbcTipo;
+
+    @FXML
+    private TableColumn<TipoCliente, String> tbcPorcentaje;
+
+    @FXML
+    private TableColumn<TipoCliente, String> tbcEjemplo;
+
+    @FXML
+    void onModificar() {
+        modificarTarifa();
+    }
+
+    @FXML
+    void onLimpiar() {
+        limpiarSeleccion();
+    }
+
+    @FXML
+    void initialize() {
+        tarifaController = new TarifaController(App.cinema);
+        initView();
+    }
+
+    private void initView() {
+        initDataBinding();
+        listTipos.setAll(TipoCliente.values());
+        tblListTarifa.setItems(listTipos);
+        cmbTipoCliente.setItems(FXCollections.observableArrayList(TipoCliente.values()));
+        cmbTipoCliente.getSelectionModel().selectFirst();
+        listenerSelection();
+    }
+
+    private void initDataBinding() {
+        tbcTipo.setCellValueFactory(d -> new ReadOnlyObjectWrapper<>(d.getValue().name()));
+        tbcPorcentaje.setCellValueFactory(d -> new ReadOnlyObjectWrapper<>(
+                String.format("%.1f%%", tarifaController.obtenerTarifa(d.getValue()) * 100)));
+        tbcEjemplo.setCellValueFactory(d -> new ReadOnlyObjectWrapper<>(
+                "$" + String.format("%,.0f", VALOR_EJEMPLO * tarifaController.obtenerTarifa(d.getValue()))));
+    }
+
+    public void refrescar() {
+        tblListTarifa.refresh();
+    }
+
+    private void listenerSelection() {
+        tblListTarifa.getSelectionModel().selectedItemProperty().addListener((obs, anterior, seleccionado) -> {
+            if (seleccionado != null) {
+                cmbTipoCliente.setValue(seleccionado);
+                txtPorcentaje.setText(String.format("%.0f", tarifaController.obtenerTarifa(seleccionado) * 100));
+            }
+        });
+    }
+
+    private void modificarTarifa() {
+        TipoCliente tipo = cmbTipoCliente.getValue();
+        String texto = txtPorcentaje.getText().trim();
+        if (tipo == null || texto.isEmpty()) {
+            mostrarError("Seleccione el tipo de cliente e indique el porcentaje.");
+            return;
+        }
+        try {
+            int porcentaje = Integer.parseInt(texto);
+            tarifaController.modificarTarifa(tipo, porcentaje / 100.0);
+            tblListTarifa.refresh();
+            limpiarSeleccion();
+            mostrarInfo("Tarifa de " + tipo + " actualizada a " + porcentaje + "% del valor base.");
+        } catch (NumberFormatException e) {
+            mostrarError("El porcentaje debe ser un numero entero, por ejemplo 80.");
+        } catch (TarifaInvalidaException e) {
+            mostrarError(e.getMessage());
+        }
+    }
+
+    private void limpiarSeleccion() {
+        tblListTarifa.getSelectionModel().clearSelection();
+        txtPorcentaje.clear();
+        cmbTipoCliente.getSelectionModel().selectFirst();
+    }
+
+    private void mostrarInfo(String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION, mensaje);
+        alerta.setHeaderText(null);
+        alerta.showAndWait();
+    }
+
+    private void mostrarError(String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.ERROR, mensaje);
+        alerta.setHeaderText("No fue posible completar la operacion");
+        alerta.showAndWait();
+    }
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="4.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.cinemauq.viewController.VentaViewController">
+    <children>
+        <GridPane hgap="8.0" vgap="6.0">
+            <padding>
+                <Insets bottom="6.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+            <children>
+                <Label text="Codigo de venta:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <TextField fx:id="txtCodigoVenta" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <Label text="Identificacion cliente:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                <TextField fx:id="txtIdCliente" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                <Label text="Funcion:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <ComboBox fx:id="cmbFuncion" prefWidth="380.0" promptText="Seleccione una funcion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label text="Nombre cliente:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <TextField fx:id="txtNombreCliente" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                <Label text="Asiento (ej. A1):" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <TextField fx:id="txtCodigoAsiento" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label text="Tipo de cliente:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <ComboBox fx:id="cmbTipoCliente" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            </children>
+        </GridPane>
+        <Label fx:id="lblValor" style="-fx-font-weight: bold;" text="Valor a pagar: -">
+            <padding>
+                <Insets left="10.0" right="10.0" />
+            </padding>
+        </Label>
+        <Label fx:id="lblDisponibilidad" text="Seleccione una funcion para ver sus asientos.">
+            <padding>
+                <Insets left="10.0" right="10.0" />
+            </padding>
+        </Label>
+        <ScrollPane fitToWidth="true" minHeight="120.0" prefHeight="120.0">
+            <content>
+                <FlowPane fx:id="fpAsientos" hgap="6.0" vgap="6.0">
+                    <padding>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                    </padding>
+                </FlowPane>
+            </content>
+        </ScrollPane>
+        <HBox spacing="10.0">
+            <padding>
+                <Insets bottom="6.0" left="10.0" right="10.0" top="6.0" />
+            </padding>
+            <children>
+                <Button mnemonicParsing="false" onAction="#onVender" text="Vender entrada" />
+                <Button mnemonicParsing="false" onAction="#onCancelar" text="Cancelar venta" />
+                <Button mnemonicParsing="false" onAction="#onLimpiar" text="Limpiar" />
+            </children>
+        </HBox>
+        <TableView fx:id="tblListVenta" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="tbcCodigo" prefWidth="80.0" text="Codigo" />
+                <TableColumn fx:id="tbcCliente" prefWidth="160.0" text="Cliente" />
+                <TableColumn fx:id="tbcPelicula" prefWidth="210.0" text="Pelicula" />
+                <TableColumn fx:id="tbcAsiento" prefWidth="80.0" text="Asiento" />
+                <TableColumn fx:id="tbcTipo" prefWidth="120.0" text="Tipo cliente" />
+                <TableColumn fx:id="tbcValor" prefWidth="100.0" text="Valor pagado" />
+                <TableColumn fx:id="tbcEstado" prefWidth="100.0" text="Estado" />
+            </columns>
+        </TableView>
+    </children>
+</VBox>

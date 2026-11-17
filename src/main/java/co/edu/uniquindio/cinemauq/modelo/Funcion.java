@@ -2,6 +2,7 @@ package co.edu.uniquindio.cinemauq.modelo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 /**
  * Proyeccion programada de una pelicula en una sala, fecha y hora especificas.
@@ -18,6 +19,7 @@ public class Funcion {
     private LocalTime hora;
     private double valorBase;
     private EstadoFuncion estado;
+    private ArrayList<Asiento> asientos;
 
     public Funcion(String codigo, Pelicula pelicula, Sala sala, LocalDate fecha, LocalTime hora, double valorBase) {
         this.codigo = codigo;
@@ -27,6 +29,25 @@ public class Funcion {
         this.hora = hora;
         this.valorBase = valorBase;
         this.estado = EstadoFuncion.PROGRAMADA;
+        this.asientos = copiarAsientosDeSala(sala);
+    }
+
+    private ArrayList<Asiento> copiarAsientosDeSala(Sala salaFuncion) {
+        ArrayList<Asiento> copia = new ArrayList<Asiento>();
+        for (int i = 0; i < salaFuncion.getAsientos().size(); i++) {
+            Asiento original = salaFuncion.getAsientos().get(i);
+            copia.add(new Asiento(original.getFila(), original.getNumero()));
+        }
+        return copia;
+    }
+
+    public Asiento buscarAsientoPorCodigo(String codigoAsiento) {
+        for (int i = 0; i < asientos.size(); i++) {
+            if (asientos.get(i).getCodigo().equalsIgnoreCase(codigoAsiento)) {
+                return asientos.get(i);
+            }
+        }
+        return null;
     }
 
     public void finalizar() {
@@ -42,11 +63,17 @@ public class Funcion {
     }
 
     public int contarAsientosDisponibles() {
-        return sala.contarAsientosDisponibles();
+        int total = 0;
+        for (int i = 0; i < asientos.size(); i++) {
+            if (asientos.get(i).estaDisponible()) {
+                total++;
+            }
+        }
+        return total;
     }
 
     public int contarAsientosOcupados() {
-        return sala.contarAsientosOcupados();
+        return asientos.size() - contarAsientosDisponibles();
     }
 
     public String getCodigo() {
@@ -75,6 +102,10 @@ public class Funcion {
 
     public EstadoFuncion getEstado() {
         return estado;
+    }
+
+    public ArrayList<Asiento> getAsientos() {
+        return asientos;
     }
 
     @Override

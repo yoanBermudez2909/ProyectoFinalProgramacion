@@ -38,12 +38,20 @@ class FuncionTest {
     }
 
     @Test
-    void contarAsientosDisponiblesReflejaLosDeLaSala() {
+    void contarAsientosUsaLosAsientosPropiosDeLaFuncion() {
         Funcion funcion = crearFuncion();
         assertEquals(10, funcion.contarAsientosDisponibles());
-        funcion.getSala().buscarAsientoPorCodigo("A1").ocupar();
+        funcion.buscarAsientoPorCodigo("A1").ocupar();
         assertEquals(9, funcion.contarAsientosDisponibles());
         assertEquals(1, funcion.contarAsientosOcupados());
+    }
+
+    @Test
+    void ocuparUnAsientoDeLaFuncionNoAfectaLaSala() {
+        Funcion funcion = crearFuncion();
+        funcion.buscarAsientoPorCodigo("A1").ocupar();
+        assertTrue(funcion.getSala().buscarAsientoPorCodigo("A1").estaDisponible());
+        assertEquals(10, funcion.getSala().contarAsientosDisponibles());
     }
 
     @Test

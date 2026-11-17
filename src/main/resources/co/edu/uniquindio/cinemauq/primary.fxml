@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+
+<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.cinemauq.viewController.PrimaryViewController">
+    <tabs>
+        <Tab text="Peliculas">
+            <content>
+                <fx:include fx:id="peliculaView" source="crudPelicula.fxml" />
+            </content>
+        </Tab>
+        <Tab text="Salas">
+            <content>
+                <fx:include fx:id="salaView" source="crudSala.fxml" />
+            </content>
+        </Tab>
+        <Tab text="Funciones">
+            <content>
+                <fx:include fx:id="funcionView" source="crudFuncion.fxml" />
+            </content>
+        </Tab>
+        <Tab text="Tarifas">
+            <content>
+                <fx:include fx:id="tarifaView" source="crudTarifa.fxml" />
+            </content>
+        </Tab>
+        <Tab text="Venta de entradas">
+            <content>
+                <fx:include fx:id="ventaView" source="ventaEntradas.fxml" />
+            </content>
+        </Tab>
+        <Tab text="Reportes">
+            <content>
+                <fx:include fx:id="reporteView" source="reportes.fxml" />
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>
