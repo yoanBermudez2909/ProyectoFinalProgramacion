@@ -88,43 +88,67 @@ public class FuncionViewController {
     @FXML
     private TableColumn<Funcion, Integer> tbcDisponibles;
 
+    /**
+     * Metodo que atiende el evento del boton para programar una funcion
+     */
     @FXML
     void onProgramarFuncion() {
         programarFuncion();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para limpiar los campos del formulario
+     */
     @FXML
     void onLimpiar() {
         limpiarCampos();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para consultar las funciones de una fecha
+     */
     @FXML
     void onConsultarPorFecha() {
         consultarPorFecha();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para mostrar todas las funciones
+     */
     @FXML
     void onVerTodas() {
         listFunciones.setAll(funcionController.obtenerListaFunciones());
         tblListFuncion.refresh();
     }
 
+    /**
+     * Metodo que inicializa el controlador de la vista de funciones
+     */
     @FXML
     void initialize() {
         funcionController = new FuncionController(App.cinema);
         initView();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para cancelar una funcion
+     */
     @FXML
     void onCancelarFuncion() {
         cancelarFuncion();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para finalizar una funcion
+     */
     @FXML
     void onFinalizarFuncion() {
         finalizarFuncion();
     }
 
+    /**
+     * Metodo que prepara los componentes de la vista con sus valores iniciales
+     */
     private void initView() {
         initDataBinding();
         cmbPelicula.setItems(listPeliculas);
@@ -136,6 +160,9 @@ public class FuncionViewController {
         refrescar();
     }
 
+    /**
+     * Metodo que enlaza las columnas de la tabla con los datos de las funciones
+     */
     private void initDataBinding() {
         tbcCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         tbcPelicula.setCellValueFactory(d -> new ReadOnlyObjectWrapper<>(d.getValue().getPelicula().getNombre()));
@@ -147,7 +174,9 @@ public class FuncionViewController {
         tbcDisponibles.setCellValueFactory(d -> new ReadOnlyObjectWrapper<>(d.getValue().contarAsientosDisponibles()));
     }
 
-    /** Recarga combos y tabla desde el modelo (se llama al cambiar de pestana). */
+    /**
+     * Metodo que recarga los combos y la tabla desde el modelo
+     */
     public void refrescar() {
         listPeliculas.setAll(funcionController.obtenerPeliculasDisponibles());
         listSalas.setAll(funcionController.obtenerListaSalas());
@@ -157,6 +186,9 @@ public class FuncionViewController {
         tblListFuncion.refresh();
     }
 
+    /**
+     * Metodo que valida los datos del formulario y programa una funcion
+     */
     private void programarFuncion() {
         String codigo = txtCodigo.getText().trim();
         String textoValor = txtValorBase.getText().trim();
@@ -191,6 +223,9 @@ public class FuncionViewController {
         }
     }
 
+    /**
+     * Metodo que muestra en la tabla las funciones programadas en la fecha seleccionada
+     */
     private void consultarPorFecha() {
         if (dpFechaConsulta.getValue() == null) {
             mostrarError("Seleccione la fecha a consultar.");
@@ -203,6 +238,9 @@ public class FuncionViewController {
         }
     }
 
+    /**
+     * Metodo que cancela la funcion seleccionada y sus ventas activas previa confirmacion
+     */
     private void cancelarFuncion() {
         Funcion funcion = tblListFuncion.getSelectionModel().getSelectedItem();
         if (funcion == null) {
@@ -229,6 +267,9 @@ public class FuncionViewController {
         }
     }
 
+    /**
+     * Metodo que finaliza la funcion seleccionada previa confirmacion
+     */
     private void finalizarFuncion() {
         Funcion funcion = tblListFuncion.getSelectionModel().getSelectedItem();
         if (funcion == null) {
@@ -253,6 +294,11 @@ public class FuncionViewController {
         }
     }
 
+    /**
+     * Metodo que muestra una alerta de confirmacion al usuario
+     * @param mensaje que se muestra en la alerta
+     * @return true si el usuario acepta, false en caso contrario
+     */
     private boolean confirmar(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION, mensaje);
         alerta.setHeaderText("Confirmar accion");
@@ -260,6 +306,9 @@ public class FuncionViewController {
         return resultado.isPresent() && resultado.get() == ButtonType.OK;
     }
 
+    /**
+     * Metodo que limpia los campos del formulario y restablece sus valores por defecto
+     */
     private void limpiarCampos() {
         txtCodigo.clear();
         cmbPelicula.setValue(null);
@@ -269,12 +318,20 @@ public class FuncionViewController {
         txtValorBase.clear();
     }
 
+    /**
+     * Metodo que muestra una alerta informativa
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarInfo(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION, mensaje);
         alerta.setHeaderText(null);
         alerta.showAndWait();
     }
 
+    /**
+     * Metodo que muestra una alerta de error
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarError(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.ERROR, mensaje);
         alerta.setHeaderText("No fue posible completar la operacion");

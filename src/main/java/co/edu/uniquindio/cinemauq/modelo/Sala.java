@@ -2,11 +2,6 @@ package co.edu.uniquindio.cinemauq.modelo;
 
 import java.util.ArrayList;
 
-/**
- * Sala de proyeccion. Al crearse genera automaticamente su coleccion de
- * asientos (filas A, B, C... de hasta 10 asientos cada una) hasta completar
- * la capacidad indicada.
- */
 public class Sala {
 
     private static final int ASIENTOS_POR_FILA = 10;
@@ -17,6 +12,12 @@ public class Sala {
     private EstadoSala estado;
     private ArrayList<Asiento> asientos;
 
+    /**
+     * Metodo constructor de la clase Sala
+     * @param codigo de la sala
+     * @param nombre de la sala
+     * @param capacidad de la sala
+     */
     public Sala(String codigo, String nombre, int capacidad) {
         this.codigo = codigo;
         this.nombre = nombre;
@@ -26,9 +27,9 @@ public class Sala {
     }
 
     /**
-     * Genera los asientos de la sala distribuidos en filas de hasta
-     * {@value #ASIENTOS_POR_FILA} asientos, identificadas con letras
-     * consecutivas (A1..A10, B1..B10, etc.) hasta alcanzar la capacidad.
+     * Metodo que permite generar los asientos de la sala en filas de hasta 10 asientos
+     * @param capacidadSala cantidad de asientos que se deben generar
+     * @return lista con los asientos generados
      */
     private ArrayList<Asiento> generarAsientos(int capacidadSala) {
         ArrayList<Asiento> lista = new ArrayList<Asiento>();
@@ -45,6 +46,11 @@ public class Sala {
         return lista;
     }
 
+    /**
+     * Metodo que permite buscar un asiento de la sala por su codigo
+     * @param codigoAsiento del asiento a buscar
+     * @return el asiento encontrado o null si no existe
+     */
     public Asiento buscarAsientoPorCodigo(String codigoAsiento) {
         for (int i = 0; i < asientos.size(); i++) {
             if (asientos.get(i).getCodigo().equalsIgnoreCase(codigoAsiento)) {
@@ -54,6 +60,10 @@ public class Sala {
         return null;
     }
 
+    /**
+     * Metodo que permite contar los asientos disponibles de la sala
+     * @return cantidad de asientos disponibles
+     */
     public int contarAsientosDisponibles() {
         int total = 0;
         for (int i = 0; i < asientos.size(); i++) {
@@ -64,18 +74,32 @@ public class Sala {
         return total;
     }
 
+    /**
+     * Metodo que permite contar los asientos ocupados de la sala
+     * @return cantidad de asientos ocupados
+     */
     public int contarAsientosOcupados() {
         return asientos.size() - contarAsientosDisponibles();
     }
 
+    /**
+     * Metodo que permite deshabilitar la sala dejandola fuera de servicio
+     */
     public void deshabilitar() {
         estado = EstadoSala.FUERA_DE_SERVICIO;
     }
 
+    /**
+     * Metodo que permite habilitar la sala
+     */
     public void habilitar() {
         estado = EstadoSala.DISPONIBLE;
     }
 
+    /**
+     * Metodo que permite saber si la sala esta disponible
+     * @return true si la sala esta disponible, false en caso contrario
+     */
     public boolean estaDisponible() {
         return estado == EstadoSala.DISPONIBLE;
     }

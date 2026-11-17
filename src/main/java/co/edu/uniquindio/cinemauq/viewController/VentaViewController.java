@@ -92,28 +92,43 @@ public class VentaViewController {
     @FXML
     private TableColumn<Venta, EstadoVenta> tbcEstado;
 
+    /**
+     * Metodo que atiende el evento del boton para vender una entrada
+     */
     @FXML
     void onVender() {
         venderEntrada();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para cancelar una venta
+     */
     @FXML
     void onCancelar() {
         cancelarVenta();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para limpiar la seleccion y los campos
+     */
     @FXML
     void onLimpiar() {
         tblListVenta.getSelectionModel().clearSelection();
         limpiarCampos();
     }
 
+    /**
+     * Metodo que inicializa el controlador de la vista de ventas
+     */
     @FXML
     void initialize() {
         ventaController = new VentaController(App.cinema);
         initView();
     }
 
+    /**
+     * Metodo que prepara los componentes de la vista con sus valores iniciales
+     */
     private void initView() {
         initDataBinding();
         cmbFuncion.setItems(listFunciones);
@@ -124,6 +139,9 @@ public class VentaViewController {
         refrescar();
     }
 
+    /**
+     * Metodo que enlaza las columnas de la tabla con los datos de las ventas
+     */
     private void initDataBinding() {
         tbcCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         tbcCliente.setCellValueFactory(d -> new ReadOnlyObjectWrapper<>(d.getValue().getCliente().getNombre()));
@@ -134,15 +152,16 @@ public class VentaViewController {
         tbcEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
     }
 
+    /**
+     * Metodo que escucha la seleccion de funcion, tipo de cliente y venta para actualizar la vista
+     */
     private void listenerSelection() {
-        // Al elegir una funcion o un tipo de cliente se actualizan el mapa de asientos y el valor a pagar
         cmbFuncion.valueProperty().addListener((obs, anterior, nueva) -> {
             actualizarAsientos();
             actualizarValor();
         });
         cmbTipoCliente.valueProperty().addListener((obs, anterior, nuevo) -> actualizarValor());
 
-        // Al elegir una venta de la tabla se copia su codigo (util para cancelarla)
         tblListVenta.getSelectionModel().selectedItemProperty().addListener((obs, anterior, seleccionada) -> {
             if (seleccionada != null) {
                 txtCodigoVenta.setText(seleccionada.getCodigo());
@@ -150,7 +169,9 @@ public class VentaViewController {
         });
     }
 
-    /** Recarga funciones y ventas desde el modelo (se llama al cambiar de pestana). */
+    /**
+     * Metodo que recarga las funciones y las ventas desde el modelo
+     */
     public void refrescar() {
         listFunciones.setAll(ventaController.obtenerListaFunciones());
         cmbFuncion.setValue(null);
@@ -159,12 +180,17 @@ public class VentaViewController {
         actualizarValor();
     }
 
+    /**
+     * Metodo que recarga la tabla de ventas desde el modelo
+     */
     private void actualizarVentas() {
         listVentas.setAll(ventaController.obtenerListaVentas());
         tblListVenta.refresh();
     }
 
-    /** Dibuja el mapa de asientos de la funcion seleccionada: verde = libre, rojo = ocupado. */
+    /**
+     * Metodo que dibuja el mapa de asientos de la funcion seleccionada, en verde los libres y en rojo los ocupados
+     */
     private void actualizarAsientos() {
         fpAsientos.getChildren().clear();
         Funcion funcion = cmbFuncion.getValue();
@@ -185,6 +211,9 @@ public class VentaViewController {
                 + " | Ocupados: " + funcion.contarAsientosOcupados());
     }
 
+    /**
+     * Metodo que calcula y muestra el valor a pagar segun la funcion y el tipo de cliente seleccionados
+     */
     private void actualizarValor() {
         Funcion funcion = cmbFuncion.getValue();
         TipoCliente tipo = cmbTipoCliente.getValue();
@@ -196,6 +225,9 @@ public class VentaViewController {
         lblValor.setText("Valor a pagar: $" + String.format("%,.0f", valor));
     }
 
+    /**
+     * Metodo que valida los datos del formulario y vende una entrada
+     */
     private void venderEntrada() {
         String codigoVenta = txtCodigoVenta.getText().trim();
         String idCliente = txtIdCliente.getText().trim();
@@ -224,6 +256,9 @@ public class VentaViewController {
         }
     }
 
+    /**
+     * Metodo que cancela la venta cuyo codigo esta en el formulario y libera su asiento
+     */
     private void cancelarVenta() {
         String codigoVenta = txtCodigoVenta.getText().trim();
         if (codigoVenta.isEmpty()) {
@@ -241,7 +276,11 @@ public class VentaViewController {
         }
     }
 
-    /** Arma la informacion de la entrada que se muestra al concretar la venta. */
+    /**
+     * Metodo que arma la informacion de la entrada que se muestra al concretar la venta
+     * @param venta de la cual se construye la informacion
+     * @return texto con la informacion de la entrada
+     */
     private String construirEntrada(Venta venta) {
         Funcion funcion = venta.getFuncion();
         return "Venta: " + venta.getCodigo() + "\n"
@@ -254,6 +293,9 @@ public class VentaViewController {
                 + "Fecha y hora de venta: " + venta.getFechaHoraVenta().format(FORMATO_FECHA_HORA);
     }
 
+    /**
+     * Metodo que limpia los campos del formulario
+     */
     private void limpiarCampos() {
         txtCodigoVenta.clear();
         txtIdCliente.clear();
@@ -262,12 +304,20 @@ public class VentaViewController {
         cmbTipoCliente.getSelectionModel().selectFirst();
     }
 
+    /**
+     * Metodo que muestra una alerta informativa
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarInfo(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION, mensaje);
         alerta.setHeaderText(null);
         alerta.showAndWait();
     }
 
+    /**
+     * Metodo que muestra una alerta de error
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarError(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.ERROR, mensaje);
         alerta.setHeaderText("No fue posible completar la operacion");

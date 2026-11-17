@@ -4,12 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-/**
- * Proyeccion programada de una pelicula en una sala, fecha y hora especificas.
- * El valor base es el precio general de referencia para esa funcion; el
- * precio final que paga cada cliente se calcula aplicando la tarifa de su
- * tipo de cliente (ver {@link CinemaUQ#venderEntrada}).
- */
 public class Funcion {
 
     private String codigo;
@@ -21,6 +15,15 @@ public class Funcion {
     private EstadoFuncion estado;
     private ArrayList<Asiento> asientos;
 
+    /**
+     * Metodo constructor de la clase Funcion
+     * @param codigo de la funcion
+     * @param pelicula de la funcion
+     * @param sala de la funcion
+     * @param fecha de la funcion
+     * @param hora de la funcion
+     * @param valorBase de la funcion
+     */
     public Funcion(String codigo, Pelicula pelicula, Sala sala, LocalDate fecha, LocalTime hora, double valorBase) {
         this.codigo = codigo;
         this.pelicula = pelicula;
@@ -32,6 +35,11 @@ public class Funcion {
         this.asientos = copiarAsientosDeSala(sala);
     }
 
+    /**
+     * Metodo que permite crear una copia de los asientos de la sala para la funcion
+     * @param salaFuncion sala de la cual se copian los asientos
+     * @return lista con los asientos copiados, todos disponibles
+     */
     private ArrayList<Asiento> copiarAsientosDeSala(Sala salaFuncion) {
         ArrayList<Asiento> copia = new ArrayList<Asiento>();
         for (int i = 0; i < salaFuncion.getAsientos().size(); i++) {
@@ -41,6 +49,11 @@ public class Funcion {
         return copia;
     }
 
+    /**
+     * Metodo que permite buscar un asiento de la funcion por su codigo
+     * @param codigoAsiento del asiento a buscar
+     * @return el asiento encontrado o null si no existe
+     */
     public Asiento buscarAsientoPorCodigo(String codigoAsiento) {
         for (int i = 0; i < asientos.size(); i++) {
             if (asientos.get(i).getCodigo().equalsIgnoreCase(codigoAsiento)) {
@@ -50,18 +63,32 @@ public class Funcion {
         return null;
     }
 
+    /**
+     * Metodo que permite finalizar la funcion
+     */
     public void finalizar() {
         estado = EstadoFuncion.FINALIZADA;
     }
 
+    /**
+     * Metodo que permite cancelar la funcion
+     */
     public void cancelar() {
         estado = EstadoFuncion.CANCELADA;
     }
 
+    /**
+     * Metodo que permite saber si la funcion esta programada
+     * @return true si la funcion esta programada, false en caso contrario
+     */
     public boolean estaProgramada() {
         return estado == EstadoFuncion.PROGRAMADA;
     }
 
+    /**
+     * Metodo que permite contar los asientos disponibles de la funcion
+     * @return cantidad de asientos disponibles
+     */
     public int contarAsientosDisponibles() {
         int total = 0;
         for (int i = 0; i < asientos.size(); i++) {
@@ -72,6 +99,10 @@ public class Funcion {
         return total;
     }
 
+    /**
+     * Metodo que permite contar los asientos ocupados de la funcion
+     * @return cantidad de asientos ocupados
+     */
     public int contarAsientosOcupados() {
         return asientos.size() - contarAsientosDisponibles();
     }

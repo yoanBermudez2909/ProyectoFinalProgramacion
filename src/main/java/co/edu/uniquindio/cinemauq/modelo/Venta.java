@@ -2,11 +2,6 @@ package co.edu.uniquindio.cinemauq.modelo;
 
 import java.time.LocalDateTime;
 
-/**
- * Venta de una entrada: asocia un cliente, una funcion y un asiento, y
- * congela el valor pagado en el momento de la venta (independiente de
- * cambios posteriores en las tarifas).
- */
 public class Venta {
 
     private String codigo;
@@ -17,6 +12,14 @@ public class Venta {
     private double valorPagado;
     private EstadoVenta estado;
 
+    /**
+     * Metodo constructor de la clase Venta
+     * @param codigo de la venta
+     * @param cliente de la venta
+     * @param funcion de la venta
+     * @param asiento de la venta
+     * @param valorPagado de la venta
+     */
     public Venta(String codigo, Cliente cliente, Funcion funcion, Asiento asiento, double valorPagado) {
         this.codigo = codigo;
         this.cliente = cliente;
@@ -27,10 +30,17 @@ public class Venta {
         this.estado = EstadoVenta.ACTIVA;
     }
 
+    /**
+     * Metodo que permite cancelar la venta
+     */
     public void cancelar() {
         estado = EstadoVenta.CANCELADA;
     }
 
+    /**
+     * Metodo que permite saber si la venta esta activa
+     * @return true si la venta esta activa, false en caso contrario
+     */
     public boolean estaActiva() {
         return estado == EstadoVenta.ACTIVA;
     }

@@ -58,37 +58,58 @@ public class PeliculaViewController {
     @FXML
     private TableColumn<Pelicula, EstadoPelicula> tbcEstado;
 
+    /**
+     * Metodo que atiende el evento del boton para registrar una pelicula
+     */
     @FXML
     void onRegistrar() {
         registrarPelicula();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para modificar una pelicula
+     */
     @FXML
     void onModificar() {
         modificarPelicula();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para deshabilitar una pelicula
+     */
     @FXML
     void onDeshabilitar() {
         deshabilitarPelicula();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para habilitar una pelicula
+     */
     @FXML
     void onHabilitar() {
         habilitarPelicula();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para limpiar la seleccion y los campos
+     */
     @FXML
     void onLimpiar() {
         limpiarSeleccion();
     }
 
+    /**
+     * Metodo que inicializa el controlador de la vista de peliculas
+     */
     @FXML
     void initialize() {
         peliculaController = new PeliculaController(App.cinema);
         initView();
     }
 
+    /**
+     * Metodo que prepara los componentes de la vista con sus valores iniciales
+     */
     private void initView() {
         initDataBinding();
         cmbClasificacion.setItems(FXCollections.observableArrayList(Clasificacion.values()));
@@ -98,6 +119,9 @@ public class PeliculaViewController {
         listenerSelection();
     }
 
+    /**
+     * Metodo que enlaza las columnas de la tabla con los datos de las peliculas
+     */
     private void initDataBinding() {
         tbcCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         tbcNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -107,18 +131,27 @@ public class PeliculaViewController {
         tbcEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
     }
 
-    /** Vuelve a cargar la tabla desde el modelo (se llama al cambiar de pestana). */
+    /**
+     * Metodo que vuelve a cargar la tabla desde el modelo
+     */
     public void refrescar() {
         listPeliculas.setAll(peliculaController.obtenerListaPeliculas());
         tblListPelicula.refresh();
     }
 
+    /**
+     * Metodo que escucha la seleccion de una pelicula en la tabla para mostrar su informacion
+     */
     private void listenerSelection() {
         tblListPelicula.getSelectionModel().selectedItemProperty().addListener((obs, anterior, seleccionada) -> {
             mostrarInformacionPelicula(seleccionada);
         });
     }
 
+    /**
+     * Metodo que muestra en el formulario la informacion de una pelicula
+     * @param pelicula cuya informacion se muestra
+     */
     private void mostrarInformacionPelicula(Pelicula pelicula) {
         if (pelicula != null) {
             txtCodigo.setText(pelicula.getCodigo());
@@ -129,6 +162,9 @@ public class PeliculaViewController {
         }
     }
 
+    /**
+     * Metodo que valida los datos del formulario y registra una pelicula
+     */
     private void registrarPelicula() {
         if (!camposCompletos()) {
             mostrarError("Debe diligenciar todos los campos.");
@@ -149,6 +185,9 @@ public class PeliculaViewController {
         }
     }
 
+    /**
+     * Metodo que valida los datos del formulario y modifica una pelicula
+     */
     private void modificarPelicula() {
         if (!camposCompletos()) {
             mostrarError("Debe diligenciar todos los campos.");
@@ -168,6 +207,9 @@ public class PeliculaViewController {
         }
     }
 
+    /**
+     * Metodo que deshabilita la pelicula cuyo codigo esta en el formulario
+     */
     private void deshabilitarPelicula() {
         if (txtCodigo.getText().trim().isEmpty()) {
             mostrarError("Seleccione una pelicula de la tabla o escriba su codigo.");
@@ -183,6 +225,9 @@ public class PeliculaViewController {
         }
     }
 
+    /**
+     * Metodo que habilita la pelicula cuyo codigo esta en el formulario
+     */
     private void habilitarPelicula() {
         if (txtCodigo.getText().trim().isEmpty()) {
             mostrarError("Seleccione una pelicula de la tabla o escriba su codigo.");
@@ -198,6 +243,10 @@ public class PeliculaViewController {
         }
     }
 
+    /**
+     * Metodo que verifica si los campos de texto del formulario estan diligenciados
+     * @return true si todos los campos estan completos, false en caso contrario
+     */
     private boolean camposCompletos() {
         return !txtCodigo.getText().trim().isEmpty()
                 && !txtNombre.getText().trim().isEmpty()
@@ -205,11 +254,17 @@ public class PeliculaViewController {
                 && !txtDuracion.getText().trim().isEmpty();
     }
 
+    /**
+     * Metodo que limpia la seleccion de la tabla y los campos del formulario
+     */
     private void limpiarSeleccion() {
         tblListPelicula.getSelectionModel().clearSelection();
         limpiarCampos();
     }
 
+    /**
+     * Metodo que limpia los campos del formulario
+     */
     private void limpiarCampos() {
         txtCodigo.clear();
         txtNombre.clear();
@@ -218,12 +273,20 @@ public class PeliculaViewController {
         cmbClasificacion.getSelectionModel().selectFirst();
     }
 
+    /**
+     * Metodo que muestra una alerta informativa
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarInfo(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION, mensaje);
         alerta.setHeaderText(null);
         alerta.showAndWait();
     }
 
+    /**
+     * Metodo que muestra una alerta de error
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarError(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.ERROR, mensaje);
         alerta.setHeaderText("No fue posible completar la operacion");

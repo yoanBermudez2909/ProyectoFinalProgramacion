@@ -1,8 +1,5 @@
 package co.edu.uniquindio.cinemauq.modelo;
 
-/**
- * Clasificacion por edades de una pelicula.
- */
 public enum Clasificacion {
     TODOS,
     MAYORES_7,

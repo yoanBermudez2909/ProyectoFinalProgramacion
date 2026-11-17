@@ -1,15 +1,17 @@
 package co.edu.uniquindio.cinemauq.modelo;
 
-/**
- * Cliente que compra entradas. El tipo de cliente determina la tarifa
- * aplicada sobre el valor base de la funcion (ver {@link CinemaUQ}).
- */
 public class Cliente {
 
     private String identificacion;
     private String nombre;
     private TipoCliente tipoCliente;
 
+    /**
+     * Metodo constructor de la clase Cliente
+     * @param identificacion del cliente
+     * @param nombre del cliente
+     * @param tipoCliente del cliente
+     */
     public Cliente(String identificacion, String nombre, TipoCliente tipoCliente) {
         this.identificacion = identificacion;
         this.nombre = nombre;

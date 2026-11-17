@@ -14,15 +14,17 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-/**
- * Clase de arranque de la aplicacion CinemaUQ. Guarda la unica instancia del
- * modelo (compartida por todas las pantallas) y abre la vista principal.
- */
+
 public class App extends Application {
 
     private Stage primaryStage;
+
     public static CinemaUQ cinema = new CinemaUQ("CinemaUQ");
 
+    /**
+     * Metodo que inicia la aplicacion, carga los datos iniciales y abre la vista principal
+     * @param primaryStage ventana principal de la aplicacion
+     */
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -31,6 +33,9 @@ public class App extends Application {
         openViewPrincipal();
     }
 
+    /**
+     * Metodo que carga y muestra la vista principal de la aplicacion
+     */
     private void openViewPrincipal() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -45,11 +50,17 @@ public class App extends Application {
         }
     }
 
+    /**
+     * Metodo principal que lanza la aplicacion
+     * @param args argumentos de la linea de comandos
+     */
     public static void main(String[] args) {
         launch();
     }
 
-    /** Carga peliculas, salas y una funcion de ejemplo para no arrancar con la aplicacion vacia. */
+    /**
+     * Metodo que registra peliculas, salas y una funcion de ejemplo al iniciar la aplicacion
+     */
     public void inicializarData() {
         try {
             cinema.registrarPelicula(new Pelicula("PEL01", "Avatar: El camino del agua", "Ciencia ficcion", 192, Clasificacion.MAYORES_12));
@@ -58,7 +69,6 @@ public class App extends Application {
             cinema.registrarSala(new Sala("SAL02", "Sala 2 (3D)", 20));
             cinema.programarFuncion("FUN01", "PEL01", "SAL01", LocalDate.now().plusDays(1), LocalTime.of(19, 30), 15000.0);
         } catch (Exception e) {
-            // Datos de ejemplo: si algo falla aqui no se debe detener el arranque de la app.
         }
     }
 }

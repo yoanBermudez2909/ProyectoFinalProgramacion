@@ -1,8 +1,5 @@
 package co.edu.uniquindio.cinemauq.modelo;
 
-/**
- * Pelicula del catalogo de CinemaUQ.
- */
 public class Pelicula {
 
     private String codigo;
@@ -12,6 +9,14 @@ public class Pelicula {
     private Clasificacion clasificacion;
     private EstadoPelicula estado;
 
+    /**
+     * Metodo constructor de la clase Pelicula
+     * @param codigo de la pelicula
+     * @param nombre de la pelicula
+     * @param genero de la pelicula
+     * @param duracionMinutos de la pelicula
+     * @param clasificacion de la pelicula
+     */
     public Pelicula(String codigo, String nombre, String genero, int duracionMinutos, Clasificacion clasificacion) {
         this.codigo = codigo;
         this.nombre = nombre;
@@ -21,14 +26,24 @@ public class Pelicula {
         this.estado = EstadoPelicula.DISPONIBLE;
     }
 
+    /**
+     * Metodo que permite deshabilitar la pelicula
+     */
     public void deshabilitar() {
         estado = EstadoPelicula.NO_DISPONIBLE;
     }
 
+    /**
+     * Metodo que permite habilitar la pelicula
+     */
     public void habilitar() {
         estado = EstadoPelicula.DISPONIBLE;
     }
 
+    /**
+     * Metodo que permite saber si la pelicula esta disponible
+     * @return true si la pelicula esta disponible, false en caso contrario
+     */
     public boolean estaDisponible() {
         return estado == EstadoPelicula.DISPONIBLE;
     }

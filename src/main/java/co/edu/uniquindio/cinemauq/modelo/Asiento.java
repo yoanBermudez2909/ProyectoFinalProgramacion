@@ -1,9 +1,5 @@
 package co.edu.uniquindio.cinemauq.modelo;
 
-/**
- * Asiento individual dentro de una sala. Cada asiento conoce su fila, su
- * numero dentro de la fila y su estado de ocupacion.
- */
 public class Asiento {
 
     private String codigo;
@@ -11,6 +7,11 @@ public class Asiento {
     private int numero;
     private EstadoAsiento estado;
 
+    /**
+     * Metodo constructor de la clase Asiento
+     * @param fila del asiento
+     * @param numero del asiento dentro de la fila
+     */
     public Asiento(String fila, int numero) {
         this.fila = fila;
         this.numero = numero;
@@ -18,16 +19,24 @@ public class Asiento {
         this.estado = EstadoAsiento.DISPONIBLE;
     }
 
-    /** Marca el asiento como ocupado (se usa al concretar una venta). */
+    /**
+     * Metodo que permite marcar el asiento como ocupado
+     */
     public void ocupar() {
         estado = EstadoAsiento.OCUPADO;
     }
 
-    /** Libera el asiento (se usa al cancelar una venta). */
+    /**
+     * Metodo que permite liberar el asiento dejandolo disponible
+     */
     public void liberar() {
         estado = EstadoAsiento.DISPONIBLE;
     }
 
+    /**
+     * Metodo que permite saber si el asiento esta disponible
+     * @return true si el asiento esta disponible, false en caso contrario
+     */
     public boolean estaDisponible() {
         return estado == EstadoAsiento.DISPONIBLE;
     }

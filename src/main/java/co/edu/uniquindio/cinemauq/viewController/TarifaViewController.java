@@ -39,22 +39,34 @@ public class TarifaViewController {
     @FXML
     private TableColumn<TipoCliente, String> tbcEjemplo;
 
+    /**
+     * Metodo que atiende el evento del boton para modificar una tarifa
+     */
     @FXML
     void onModificar() {
         modificarTarifa();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para limpiar la seleccion y los campos
+     */
     @FXML
     void onLimpiar() {
         limpiarSeleccion();
     }
 
+    /**
+     * Metodo que inicializa el controlador de la vista de tarifas
+     */
     @FXML
     void initialize() {
         tarifaController = new TarifaController(App.cinema);
         initView();
     }
 
+    /**
+     * Metodo que prepara los componentes de la vista con sus valores iniciales
+     */
     private void initView() {
         initDataBinding();
         listTipos.setAll(TipoCliente.values());
@@ -64,6 +76,9 @@ public class TarifaViewController {
         listenerSelection();
     }
 
+    /**
+     * Metodo que enlaza las columnas de la tabla con los datos de las tarifas
+     */
     private void initDataBinding() {
         tbcTipo.setCellValueFactory(d -> new ReadOnlyObjectWrapper<>(d.getValue().name()));
         tbcPorcentaje.setCellValueFactory(d -> new ReadOnlyObjectWrapper<>(
@@ -72,10 +87,16 @@ public class TarifaViewController {
                 "$" + String.format("%,.0f", VALOR_EJEMPLO * tarifaController.obtenerTarifa(d.getValue()))));
     }
 
+    /**
+     * Metodo que actualiza la tabla de tarifas
+     */
     public void refrescar() {
         tblListTarifa.refresh();
     }
 
+    /**
+     * Metodo que escucha la seleccion de un tipo de cliente en la tabla para mostrar su tarifa
+     */
     private void listenerSelection() {
         tblListTarifa.getSelectionModel().selectedItemProperty().addListener((obs, anterior, seleccionado) -> {
             if (seleccionado != null) {
@@ -85,6 +106,9 @@ public class TarifaViewController {
         });
     }
 
+    /**
+     * Metodo que valida el porcentaje ingresado y modifica la tarifa del tipo de cliente seleccionado
+     */
     private void modificarTarifa() {
         TipoCliente tipo = cmbTipoCliente.getValue();
         String texto = txtPorcentaje.getText().trim();
@@ -105,18 +129,29 @@ public class TarifaViewController {
         }
     }
 
+    /**
+     * Metodo que limpia la seleccion de la tabla y los campos del formulario
+     */
     private void limpiarSeleccion() {
         tblListTarifa.getSelectionModel().clearSelection();
         txtPorcentaje.clear();
         cmbTipoCliente.getSelectionModel().selectFirst();
     }
 
+    /**
+     * Metodo que muestra una alerta informativa
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarInfo(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION, mensaje);
         alerta.setHeaderText(null);
         alerta.showAndWait();
     }
 
+    /**
+     * Metodo que muestra una alerta de error
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarError(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.ERROR, mensaje);
         alerta.setHeaderText("No fue posible completar la operacion");

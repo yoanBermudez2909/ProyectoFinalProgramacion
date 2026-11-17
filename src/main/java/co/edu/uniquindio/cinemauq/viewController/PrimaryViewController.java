@@ -26,6 +26,9 @@ public class PrimaryViewController {
     @FXML
     private ReporteViewController reporteViewController;
 
+    /**
+     * Metodo que inicializa el controlador principal y refresca la pestana al cambiar de seleccion
+     */
     @FXML
     void initialize() {
         tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, anterior, nuevo) -> {
@@ -33,6 +36,10 @@ public class PrimaryViewController {
         });
     }
 
+    /**
+     * Metodo que refresca la informacion de la pestana seleccionada
+     * @param indice de la pestana seleccionada
+     */
     private void refrescarPestana(int indice) {
         switch (indice) {
             case 0:

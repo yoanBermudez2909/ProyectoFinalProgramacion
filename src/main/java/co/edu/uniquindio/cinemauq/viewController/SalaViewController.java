@@ -45,37 +45,58 @@ public class SalaViewController {
     @FXML
     private TableColumn<Sala, EstadoSala> tbcEstado;
 
+    /**
+     * Metodo que atiende el evento del boton para registrar una sala
+     */
     @FXML
     void onRegistrar() {
         registrarSala();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para modificar el nombre de una sala
+     */
     @FXML
     void onModificarNombre() {
         modificarNombreSala();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para deshabilitar una sala
+     */
     @FXML
     void onDeshabilitar() {
         deshabilitarSala();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para habilitar una sala
+     */
     @FXML
     void onHabilitar() {
         habilitarSala();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para limpiar la seleccion y los campos
+     */
     @FXML
     void onLimpiar() {
         limpiarSeleccion();
     }
 
+    /**
+     * Metodo que inicializa el controlador de la vista de salas
+     */
     @FXML
     void initialize() {
         salaController = new SalaController(App.cinema);
         initView();
     }
 
+    /**
+     * Metodo que prepara los componentes de la vista con sus valores iniciales
+     */
     private void initView() {
         initDataBinding();
         tblListSala.setItems(listSalas);
@@ -83,6 +104,9 @@ public class SalaViewController {
         listenerSelection();
     }
 
+    /**
+     * Metodo que enlaza las columnas de la tabla con los datos de las salas
+     */
     private void initDataBinding() {
         tbcCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         tbcNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -90,18 +114,27 @@ public class SalaViewController {
         tbcEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
     }
 
-    /** Vuelve a cargar la tabla desde el modelo (se llama al cambiar de pestana). */
+    /**
+     * Metodo que vuelve a cargar la tabla desde el modelo
+     */
     public void refrescar() {
         listSalas.setAll(salaController.obtenerListaSalas());
         tblListSala.refresh();
     }
 
+    /**
+     * Metodo que escucha la seleccion de una sala en la tabla para mostrar su informacion
+     */
     private void listenerSelection() {
         tblListSala.getSelectionModel().selectedItemProperty().addListener((obs, anterior, seleccionada) -> {
             mostrarInformacionSala(seleccionada);
         });
     }
 
+    /**
+     * Metodo que muestra en el formulario la informacion de una sala
+     * @param sala cuya informacion se muestra
+     */
     private void mostrarInformacionSala(Sala sala) {
         if (sala != null) {
             txtCodigo.setText(sala.getCodigo());
@@ -110,6 +143,9 @@ public class SalaViewController {
         }
     }
 
+    /**
+     * Metodo que valida los datos del formulario y registra una sala
+     */
     private void registrarSala() {
         if (txtCodigo.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty()
                 || txtCapacidad.getText().trim().isEmpty()) {
@@ -134,6 +170,9 @@ public class SalaViewController {
         }
     }
 
+    /**
+     * Metodo que modifica el nombre de la sala cuyo codigo esta en el formulario
+     */
     private void modificarNombreSala() {
         if (txtCodigo.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty()) {
             mostrarError("Debe indicar el codigo y el nuevo nombre de la sala.");
@@ -149,6 +188,9 @@ public class SalaViewController {
         }
     }
 
+    /**
+     * Metodo que deshabilita la sala cuyo codigo esta en el formulario
+     */
     private void deshabilitarSala() {
         if (txtCodigo.getText().trim().isEmpty()) {
             mostrarError("Seleccione una sala de la tabla o escriba su codigo.");
@@ -164,6 +206,9 @@ public class SalaViewController {
         }
     }
 
+    /**
+     * Metodo que habilita la sala cuyo codigo esta en el formulario
+     */
     private void habilitarSala() {
         if (txtCodigo.getText().trim().isEmpty()) {
             mostrarError("Seleccione una sala de la tabla o escriba su codigo.");
@@ -179,23 +224,37 @@ public class SalaViewController {
         }
     }
 
+    /**
+     * Metodo que limpia la seleccion de la tabla y los campos del formulario
+     */
     private void limpiarSeleccion() {
         tblListSala.getSelectionModel().clearSelection();
         limpiarCampos();
     }
 
+    /**
+     * Metodo que limpia los campos del formulario
+     */
     private void limpiarCampos() {
         txtCodigo.clear();
         txtNombre.clear();
         txtCapacidad.clear();
     }
 
+    /**
+     * Metodo que muestra una alerta informativa
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarInfo(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION, mensaje);
         alerta.setHeaderText(null);
         alerta.showAndWait();
     }
 
+    /**
+     * Metodo que muestra una alerta de error
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarError(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.ERROR, mensaje);
         alerta.setHeaderText("No fue posible completar la operacion");

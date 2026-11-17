@@ -63,27 +63,42 @@ public class ReporteViewController {
     @FXML
     private TableColumn<Funcion, Integer> tbcDisponibles;
 
+    /**
+     * Metodo que atiende el evento del boton para generar los reportes generales
+     */
     @FXML
     void onGenerarReportes() {
         generarReportesGenerales();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para consultar la ocupacion de una funcion
+     */
     @FXML
     void onConsultarOcupacion() {
         consultarOcupacion();
     }
 
+    /**
+     * Metodo que atiende el evento del boton para consultar las funciones de una fecha
+     */
     @FXML
     void onConsultarPorFecha() {
         consultarPorFecha();
     }
 
+    /**
+     * Metodo que inicializa el controlador de la vista de reportes
+     */
     @FXML
     void initialize() {
         reporteController = new ReporteController(App.cinema);
         initView();
     }
 
+    /**
+     * Metodo que prepara los componentes de la vista con sus valores iniciales
+     */
     private void initView() {
         initDataBinding();
         cmbFuncion.setItems(listFunciones);
@@ -92,6 +107,9 @@ public class ReporteViewController {
         refrescar();
     }
 
+    /**
+     * Metodo que enlaza las columnas de la tabla con los datos de las funciones
+     */
     private void initDataBinding() {
         tbcCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         tbcPelicula.setCellValueFactory(d -> new ReadOnlyObjectWrapper<>(d.getValue().getPelicula().getNombre()));
@@ -100,6 +118,9 @@ public class ReporteViewController {
         tbcDisponibles.setCellValueFactory(d -> new ReadOnlyObjectWrapper<>(d.getValue().contarAsientosDisponibles()));
     }
 
+    /**
+     * Metodo que recarga las funciones, reinicia las consultas y regenera los reportes generales
+     */
     public void refrescar() {
         listFunciones.setAll(reporteController.obtenerListaFunciones());
         cmbFuncion.setValue(null);
@@ -108,6 +129,9 @@ public class ReporteViewController {
         generarReportesGenerales();
     }
 
+    /**
+     * Metodo que genera y muestra el total de entradas vendidas, el total de ingresos y la pelicula mas vendida
+     */
     private void generarReportesGenerales() {
         int totalEntradas = reporteController.totalEntradasVendidas();
         lblEntradasVendidas.setText("Total entradas vendidas: " + totalEntradas);
@@ -120,6 +144,9 @@ public class ReporteViewController {
         }
     }
 
+    /**
+     * Metodo que consulta y muestra la ocupacion de la funcion seleccionada
+     */
     private void consultarOcupacion() {
         Funcion funcion = cmbFuncion.getValue();
         if (funcion == null) {
@@ -136,6 +163,9 @@ public class ReporteViewController {
         }
     }
 
+    /**
+     * Metodo que muestra en la tabla las funciones programadas en la fecha seleccionada
+     */
     private void consultarPorFecha() {
         if (dpFecha.getValue() == null) {
             mostrarError("Seleccione la fecha a consultar.");
@@ -148,12 +178,20 @@ public class ReporteViewController {
         }
     }
 
+    /**
+     * Metodo que muestra una alerta informativa
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarInfo(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION, mensaje);
         alerta.setHeaderText(null);
         alerta.showAndWait();
     }
 
+    /**
+     * Metodo que muestra una alerta de error
+     * @param mensaje que se muestra en la alerta
+     */
     private void mostrarError(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.ERROR, mensaje);
         alerta.setHeaderText("No fue posible completar la operacion");

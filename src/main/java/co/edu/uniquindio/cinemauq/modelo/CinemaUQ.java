@@ -24,22 +24,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Clase raiz del sistema CinemaUQ. Centraliza el catalogo de peliculas,
- * salas, funciones y ventas, y expone las funcionalidades de operador y
- * de administrador exigidas por el proyecto, junto con los reportes.
- *
- * <p>Tarifas: cada tipo de cliente tiene asociado un factor de descuento
- * que se aplica sobre el valor base de la funcion para calcular el valor
- * final de la entrada (decision del grupo, documentada en el analisis de
- * pensamiento computacional):</p>
- * <ul>
- *   <li>GENERAL: 100% del valor base</li>
- *   <li>ESTUDIANTE: 80% del valor base</li>
- *   <li>NINO: 65% del valor base</li>
- *   <li>ADULTO_MAYOR: 75% del valor base</li>
- * </ul>
- */
 public class CinemaUQ {
 
     private String nombre;
@@ -49,6 +33,10 @@ public class CinemaUQ {
     private ArrayList<Venta> ventas;
     private HashMap<TipoCliente, Double> tarifas;
 
+    /**
+     * Metodo constructor de la clase CinemaUQ
+     * @param nombre del cinema
+     */
     public CinemaUQ(String nombre) {
         this.nombre = nombre;
         this.peliculas = new ArrayList<Pelicula>();
@@ -62,8 +50,11 @@ public class CinemaUQ {
         tarifas.put(TipoCliente.ADULTO_MAYOR, 0.75);
     }
 
-    // ================== Gestion de peliculas (administrador) ==================
-
+    /**
+     * Metodo que permite registrar una pelicula en el cinema
+     * @param pelicula a registrar
+     * @throws PeliculaDuplicadaException si ya existe una pelicula con el mismo codigo
+     */
     public void registrarPelicula(Pelicula pelicula) throws PeliculaDuplicadaException {
         if (buscarPeliculaPorCodigo(pelicula.getCodigo()) != null) {
             throw new PeliculaDuplicadaException("Ya existe una pelicula con el codigo " + pelicula.getCodigo());
@@ -71,6 +62,11 @@ public class CinemaUQ {
         peliculas.add(pelicula);
     }
 
+    /**
+     * Metodo que permite buscar una pelicula por su codigo
+     * @param codigo de la pelicula a buscar
+     * @return la pelicula encontrada o null si no existe
+     */
     public Pelicula buscarPeliculaPorCodigo(String codigo) {
         for (int i = 0; i < peliculas.size(); i++) {
             if (peliculas.get(i).getCodigo().equals(codigo)) {
@@ -80,10 +76,23 @@ public class CinemaUQ {
         return null;
     }
 
+    /**
+     * Metodo que permite listar las peliculas del cinema
+     * @return lista de peliculas registradas
+     */
     public ArrayList<Pelicula> listarPeliculas() {
         return peliculas;
     }
 
+    /**
+     * Metodo que permite modificar la informacion de una pelicula
+     * @param codigo de la pelicula a modificar
+     * @param nombre nuevo de la pelicula
+     * @param genero nuevo de la pelicula
+     * @param duracionMinutos nueva de la pelicula
+     * @param clasificacion nueva de la pelicula
+     * @throws PeliculaNoEncontradaException si no existe una pelicula con ese codigo
+     */
     public void modificarPelicula(String codigo, String nombre, String genero, int duracionMinutos,
                                   Clasificacion clasificacion) throws PeliculaNoEncontradaException {
         Pelicula pelicula = buscarPeliculaPorCodigo(codigo);
@@ -96,6 +105,11 @@ public class CinemaUQ {
         pelicula.setClasificacion(clasificacion);
     }
 
+    /**
+     * Metodo que permite deshabilitar una pelicula
+     * @param codigo de la pelicula a deshabilitar
+     * @throws PeliculaNoEncontradaException si no existe una pelicula con ese codigo
+     */
     public void deshabilitarPelicula(String codigo) throws PeliculaNoEncontradaException {
         Pelicula pelicula = buscarPeliculaPorCodigo(codigo);
         if (pelicula == null) {
@@ -104,8 +118,11 @@ public class CinemaUQ {
         pelicula.deshabilitar();
     }
 
-    // ================== Gestion de salas (administrador) ==================
-
+    /**
+     * Metodo que permite registrar una sala en el cinema
+     * @param sala a registrar
+     * @throws SalaDuplicadaException si ya existe una sala con el mismo codigo
+     */
     public void registrarSala(Sala sala) throws SalaDuplicadaException {
         if (buscarSalaPorCodigo(sala.getCodigo()) != null) {
             throw new SalaDuplicadaException("Ya existe una sala con el codigo " + sala.getCodigo());
@@ -113,6 +130,11 @@ public class CinemaUQ {
         salas.add(sala);
     }
 
+    /**
+     * Metodo que permite buscar una sala por su codigo
+     * @param codigo de la sala a buscar
+     * @return la sala encontrada o null si no existe
+     */
     public Sala buscarSalaPorCodigo(String codigo) {
         for (int i = 0; i < salas.size(); i++) {
             if (salas.get(i).getCodigo().equals(codigo)) {
@@ -122,10 +144,20 @@ public class CinemaUQ {
         return null;
     }
 
+    /**
+     * Metodo que permite listar las salas del cinema
+     * @return lista de salas registradas
+     */
     public ArrayList<Sala> listarSalas() {
         return salas;
     }
 
+    /**
+     * Metodo que permite modificar el nombre de una sala
+     * @param codigo de la sala a modificar
+     * @param nuevoNombre de la sala
+     * @throws SalaNoEncontradaException si no existe una sala con ese codigo
+     */
     public void modificarSala(String codigo, String nuevoNombre) throws SalaNoEncontradaException {
         Sala sala = buscarSalaPorCodigo(codigo);
         if (sala == null) {
@@ -134,6 +166,11 @@ public class CinemaUQ {
         sala.setNombre(nuevoNombre);
     }
 
+    /**
+     * Metodo que permite deshabilitar una sala
+     * @param codigo de la sala a deshabilitar
+     * @throws SalaNoEncontradaException si no existe una sala con ese codigo
+     */
     public void deshabilitarSala(String codigo) throws SalaNoEncontradaException {
         Sala sala = buscarSalaPorCodigo(codigo);
         if (sala == null) {
@@ -142,8 +179,22 @@ public class CinemaUQ {
         sala.deshabilitar();
     }
 
-    // ================== Gestion de funciones (administrador) ==================
-
+    /**
+     * Metodo que permite programar una funcion en el cinema
+     * @param codigo de la funcion
+     * @param codigoPelicula de la funcion
+     * @param codigoSala de la funcion
+     * @param fecha de la funcion
+     * @param hora de la funcion
+     * @param valorBase de la funcion
+     * @return la funcion programada
+     * @throws PeliculaNoEncontradaException si no existe la pelicula
+     * @throws SalaNoEncontradaException si no existe la sala
+     * @throws SalaNoDisponibleException si la sala esta fuera de servicio
+     * @throws PeliculaNoDisponibleException si la pelicula no esta disponible
+     * @throws FuncionDuplicadaException si ya existe una funcion con el mismo codigo
+     * @throws SalaOcupadaException si la sala ya tiene una funcion en ese horario
+     */
     public Funcion programarFuncion(String codigo, String codigoPelicula, String codigoSala,
                                     LocalDate fecha, LocalTime hora, double valorBase)
             throws PeliculaNoEncontradaException, SalaNoEncontradaException, SalaNoDisponibleException,
@@ -178,6 +229,13 @@ public class CinemaUQ {
         return funcion;
     }
 
+    /**
+     * Metodo que permite buscar una funcion programada que se cruce con un horario en una sala
+     * @param codigoSala de la sala a revisar
+     * @param inicio del horario a revisar
+     * @param fin del horario a revisar
+     * @return la funcion en conflicto o null si no hay ninguna
+     */
     private Funcion buscarFuncionEnConflicto(String codigoSala, LocalDateTime inicio, LocalDateTime fin) {
         for (int i = 0; i < funciones.size(); i++) {
             Funcion existente = funciones.get(i);
@@ -192,6 +250,11 @@ public class CinemaUQ {
         return null;
     }
 
+    /**
+     * Metodo que permite buscar una funcion por su codigo
+     * @param codigo de la funcion a buscar
+     * @return la funcion encontrada o null si no existe
+     */
     public Funcion buscarFuncionPorCodigo(String codigo) {
         for (int i = 0; i < funciones.size(); i++) {
             if (funciones.get(i).getCodigo().equals(codigo)) {
@@ -201,10 +264,19 @@ public class CinemaUQ {
         return null;
     }
 
+    /**
+     * Metodo que permite listar las funciones del cinema
+     * @return lista de funciones registradas
+     */
     public ArrayList<Funcion> listarFunciones() {
         return funciones;
     }
 
+    /**
+     * Metodo que permite consultar las funciones programadas en una fecha
+     * @param fecha de las funciones a consultar
+     * @return lista de funciones programadas en esa fecha
+     */
     public ArrayList<Funcion> consultarFuncionesProgramadasPorFecha(LocalDate fecha) {
         ArrayList<Funcion> resultado = new ArrayList<Funcion>();
         for (int i = 0; i < funciones.size(); i++) {
@@ -216,8 +288,13 @@ public class CinemaUQ {
         return resultado;
     }
 
-    // ================== Venta de entradas (operador) ==================
-
+    /**
+     * Metodo que permite cancelar una funcion y sus ventas activas
+     * @param codigoFuncion de la funcion a cancelar
+     * @return cantidad de ventas que se cancelaron
+     * @throws FuncionNoEncontradaException si no existe la funcion
+     * @throws FuncionNoProgramadaException si la funcion no esta programada
+     */
     public int cancelarFuncion(String codigoFuncion) throws FuncionNoEncontradaException, FuncionNoProgramadaException {
         Funcion funcion = buscarFuncionPorCodigo(codigoFuncion);
         if (funcion == null) {
@@ -240,6 +317,12 @@ public class CinemaUQ {
         return ventasCanceladas;
     }
 
+    /**
+     * Metodo que permite finalizar una funcion
+     * @param codigoFuncion de la funcion a finalizar
+     * @throws FuncionNoEncontradaException si no existe la funcion
+     * @throws FuncionNoProgramadaException si la funcion no esta programada
+     */
     public void finalizarFuncion(String codigoFuncion) throws FuncionNoEncontradaException, FuncionNoProgramadaException {
         Funcion funcion = buscarFuncionPorCodigo(codigoFuncion);
         if (funcion == null) {
@@ -252,6 +335,11 @@ public class CinemaUQ {
         funcion.finalizar();
     }
 
+    /**
+     * Metodo que permite contar las ventas activas de una funcion
+     * @param codigoFuncion de la funcion a consultar
+     * @return cantidad de ventas activas de la funcion
+     */
     public int contarVentasActivasPorFuncion(String codigoFuncion) {
         int total = 0;
         for (int i = 0; i < ventas.size(); i++) {
@@ -263,6 +351,11 @@ public class CinemaUQ {
         return total;
     }
 
+    /**
+     * Metodo que permite habilitar una pelicula
+     * @param codigo de la pelicula a habilitar
+     * @throws PeliculaNoEncontradaException si no existe una pelicula con ese codigo
+     */
     public void habilitarPelicula(String codigo) throws PeliculaNoEncontradaException {
         Pelicula pelicula = buscarPeliculaPorCodigo(codigo);
         if (pelicula == null) {
@@ -271,6 +364,11 @@ public class CinemaUQ {
         pelicula.habilitar();
     }
 
+    /**
+     * Metodo que permite habilitar una sala
+     * @param codigo de la sala a habilitar
+     * @throws SalaNoEncontradaException si no existe una sala con ese codigo
+     */
     public void habilitarSala(String codigo) throws SalaNoEncontradaException {
         Sala sala = buscarSalaPorCodigo(codigo);
         if (sala == null) {
@@ -279,6 +377,19 @@ public class CinemaUQ {
         sala.habilitar();
     }
 
+    /**
+     * Metodo que permite vender una entrada para una funcion
+     * @param codigoVenta de la venta
+     * @param codigoFuncion de la funcion
+     * @param cliente que compra la entrada
+     * @param codigoAsiento del asiento seleccionado
+     * @return la venta registrada
+     * @throws FuncionNoEncontradaException si no existe la funcion
+     * @throws FuncionNoProgramadaException si la funcion no esta programada
+     * @throws SinAsientosDisponiblesException si no hay asientos disponibles
+     * @throws AsientoOcupadoException si el asiento no esta disponible
+     * @throws VentaDuplicadaException si ya existe una venta con el mismo codigo
+     */
     public Venta venderEntrada(String codigoVenta, String codigoFuncion, Cliente cliente, String codigoAsiento)
             throws FuncionNoEncontradaException, FuncionNoProgramadaException, SinAsientosDisponiblesException,
             AsientoOcupadoException, VentaDuplicadaException {
@@ -308,12 +419,23 @@ public class CinemaUQ {
         return venta;
     }
 
-    /** Calcula el valor de la entrada aplicando la tarifa del tipo de cliente sobre el valor base de la funcion. */
+    /**
+     * Metodo que permite calcular el valor de una entrada segun el tipo de cliente
+     * @param funcion de la cual se toma el valor base
+     * @param tipoCliente del cliente que compra la entrada
+     * @return valor de la entrada
+     */
     public double calcularValorEntrada(Funcion funcion, TipoCliente tipoCliente) {
         double factor = tarifas.get(tipoCliente);
         return funcion.getValorBase() * factor;
     }
 
+    /**
+     * Metodo que permite cancelar una venta y liberar su asiento
+     * @param codigoVenta de la venta a cancelar
+     * @throws VentaNoEncontradaException si no existe la venta
+     * @throws VentaYaCanceladaException si la venta ya fue cancelada
+     */
     public void cancelarVenta(String codigoVenta) throws VentaNoEncontradaException, VentaYaCanceladaException {
         Venta venta = buscarVentaPorCodigo(codigoVenta);
         if (venta == null) {
@@ -326,6 +448,11 @@ public class CinemaUQ {
         venta.cancelar();
     }
 
+    /**
+     * Metodo que permite buscar una venta por su codigo
+     * @param codigo de la venta a buscar
+     * @return la venta encontrada o null si no existe
+     */
     public Venta buscarVentaPorCodigo(String codigo) {
         for (int i = 0; i < ventas.size(); i++) {
             if (ventas.get(i).getCodigo().equals(codigo)) {
@@ -335,12 +462,18 @@ public class CinemaUQ {
         return null;
     }
 
+    /**
+     * Metodo que permite listar las ventas del cinema
+     * @return lista de ventas registradas
+     */
     public ArrayList<Venta> listarVentas() {
         return ventas;
     }
 
-    // ================== Reportes ==================
-
+    /**
+     * Metodo que permite obtener el total de entradas vendidas
+     * @return cantidad de ventas activas
+     */
     public int totalEntradasVendidas() {
         int total = 0;
         for (int i = 0; i < ventas.size(); i++) {
@@ -351,6 +484,10 @@ public class CinemaUQ {
         return total;
     }
 
+    /**
+     * Metodo que permite obtener el total de ingresos del cinema
+     * @return suma del valor pagado de las ventas activas
+     */
     public double totalIngresos() {
         double total = 0.0;
         for (int i = 0; i < ventas.size(); i++) {
@@ -361,6 +498,10 @@ public class CinemaUQ {
         return total;
     }
 
+    /**
+     * Metodo que permite obtener la pelicula con mayor cantidad de entradas vendidas
+     * @return la pelicula con mas ventas o null si no hay ventas
+     */
     public Pelicula peliculaConMasVentas() {
         Pelicula mejor = null;
         int mejorCantidad = 0;
@@ -375,6 +516,11 @@ public class CinemaUQ {
         return mejor;
     }
 
+    /**
+     * Metodo que permite contar las ventas activas de una pelicula
+     * @param pelicula de la cual se cuentan las ventas
+     * @return cantidad de ventas activas de la pelicula
+     */
     private int contarVentasActivasPorPelicula(Pelicula pelicula) {
         int total = 0;
         for (int i = 0; i < ventas.size(); i++) {
@@ -386,6 +532,12 @@ public class CinemaUQ {
         return total;
     }
 
+    /**
+     * Metodo que permite calcular el porcentaje de ocupacion de una funcion
+     * @param codigoFuncion de la funcion a consultar
+     * @return porcentaje de asientos ocupados
+     * @throws FuncionNoEncontradaException si no existe la funcion
+     */
     public double porcentajeOcupacion(String codigoFuncion) throws FuncionNoEncontradaException {
         Funcion funcion = buscarFuncionPorCodigo(codigoFuncion);
         if (funcion == null) {
@@ -406,6 +558,13 @@ public class CinemaUQ {
     public HashMap<TipoCliente, Double> getTarifas() {
         return tarifas;
     }
+
+    /**
+     * Metodo que permite modificar la tarifa de un tipo de cliente
+     * @param tipoCliente al cual se le modifica la tarifa
+     * @param factor nuevo que se aplica sobre el valor base
+     * @throws TarifaInvalidaException si el factor es menor o igual a 0 o mayor a 1
+     */
     public void modificarTarifa(TipoCliente tipoCliente, double factor) throws TarifaInvalidaException {
         if (factor <= 0 || factor > 1) {
             throw new TarifaInvalidaException("La tarifa debe ser mayor que 0 y no superar el 100% del valor base.");
@@ -413,6 +572,11 @@ public class CinemaUQ {
         tarifas.put(tipoCliente, factor);
     }
 
+    /**
+     * Metodo que permite obtener la tarifa de un tipo de cliente
+     * @param tipoCliente del cual se consulta la tarifa
+     * @return factor que se aplica sobre el valor base
+     */
     public double obtenerTarifa(TipoCliente tipoCliente) {
         return tarifas.get(tipoCliente);
     }
